@@ -35,7 +35,7 @@ Adding --rm option will remove the container automatically after the container e
 `docker run --rm -it \
   -e PROCESSING_DROPBOX=/opt/data/dropbox \
   --volume="$(pwd)/container_example_data:/opt/data" \
-  my-image:latest /opt/data/dropbox/libera_input_manifest_20220923t000000.json`
+  my-image:latest /opt/data/dropbox/input_manifest_20220923t000000.json`
 
 The script `run_container_example.sh` should contain this code as well. You can build and run the example container
 with `./run_container_example.sh`. Docker must be running, you must have permissions to execute the script, and

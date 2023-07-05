@@ -81,7 +81,7 @@ def main():
     output_files.append({"filename": output_filepath, "checksum": checksum})
 
     # Write output manifest file containing a list of the product files that the processing created
-    output_manifest_path = os.path.join(processing_dropbox, "libera_output_manifest_20220923t111111.json")
+    output_manifest_path = os.path.join(processing_dropbox, "output_manifest_20220923t111111.json")
     logger.info(f"Writing output manifest: {output_filepath}")
     output_manifest = Manifest(manifest_type=ManifestType.OUTPUT,
                                filename=output_manifest_path,
