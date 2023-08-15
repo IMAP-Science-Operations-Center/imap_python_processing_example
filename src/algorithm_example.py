@@ -14,7 +14,6 @@ import h5py as h5
 import numpy as np
 import pandas as pd
 # Local
-from libera_utils.io.smart_open import smart_open
 from libera_utils.io.manifest import Manifest, ManifestType
 from static.l2_quality_flags import L2QualityFlag
 
@@ -52,12 +51,12 @@ def main():
         checksum = record['checksum']
         filename = record['filename']
         # Validate checksums
-        with smart_open(filename, 'rb') as fh:
+        with open(filename, 'rb') as fh:
             if checksum != md5(fh.read()).hexdigest():
                 raise ValueError("Checksums do not match!")
             logger.debug(f"Checksum matches for {filename}")
 
-        with h5.File(smart_open(filename, 'rb'), 'r') as h5file:
+        with h5.File(open(filename, 'rb'), 'r') as h5file:
             # Get the data from each file and put data into some format that will be used in the algorithm
             data_in = np.array(h5file['HDFEOS/SWATHS/Swath1/DataField/Temperature'])
             logger.info(f"Found input data in HDF5 file:\n{data_in}")
@@ -68,14 +67,14 @@ def main():
     output_files = []
     output_filepath = os.path.join(processing_dropbox, 'example_output.h5')
     logger.info(f"Writing output file: {output_filepath}")
-    with h5.File(smart_open(output_filepath, 'xb'), 'x') as hdf:
+    with h5.File(open(output_filepath, 'xb'), 'x') as hdf:
         hdf.create_group('new_group')
         hdf.attrs['someattr'] = "hello, world"
         hdf.create_dataset('data/array1', data=df.data_out)
         hdf.create_dataset('quality_out/array1', data=df.quality_int)
 
     # get the checksum of the written file
-    with smart_open(output_filepath, 'rb') as fh:
+    with open(output_filepath, 'rb') as fh:
         checksum = md5(fh.read()).hexdigest()
 
     output_files.append({"filename": output_filepath, "checksum": checksum})
